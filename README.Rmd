@@ -1,0 +1,69 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# covidutils
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Centralised utility functions for covid related projects at Epicentre.
+
+## Installation
+
+Install covidutils from github with:
+
+``` r
+remotes::install_github("epicentre-msf/covidutils")
+```
+
+## Development
+
+To include a function in the package, add it to a script in the `R/` directory. 
+
+### Best practices
+
+- Large functions should have their own `.R` script inside the `R/` directory with an information name, `get_ecdc.R` for example
+- Smaller utility functions can be grouped into a single script such as `utils.R`
+- If you are using functions used from external packages inside your own function, they must be fully qualified i.e. `dplyr::filter()`
+- All external packages used must be added to the imports section of the `DESCRIPTION` file. This can be done via `usethis::use_package("name_of_package")`
+- All variables used within a function should be passed as arguments
+- Document your functions using [roxygen syntax](https://roxygen2.r-lib.org/)
+- When your changes are ready and documented:
+  - run `devtools::document()` to build the appropriate documentation files
+  - run `devtools::check()` to check the package for any errors or warnings
+  - run `devtools::install()` to install or re-install the package on your system
+  - consider adding a usage of example of any new functions in this `README.Rmd` below then knit the document to produce the `.md` format required for github
+  - push the changes to github
+  
+If using RStudio, you can document, check and install the package with option in the 'Build' pane.
+
+When developing new functions you can run `devtools::load_all()` at anytime load the current state of all function in the `R/` directory.
+
+## Function examples
+
+```{r example}
+library(covidutils)
+```
+
+### Import ECDC data
+
+```{r}
+df_ecdc <- get_ecdc_data()
+
+df_ecdc
+```
+
