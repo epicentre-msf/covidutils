@@ -54,6 +54,14 @@ option in the ‘Build’ pane.
 When developing new functions you can run `devtools::load_all()` at
 anytime load the current state of all function in the `R/` directory.
 
+Further R package development resources:
+
+  - [Hadley Wickham’s R Packages book](https://r-pkgs.org/) (free
+    online)
+  - [Karl Broman’s R package primer](https://kbroman.org/pkg_primer/)
+  - [Hilary Parker’s R package from scratch
+    tutorial](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)
+
 ## Function examples
 
 ``` r
