@@ -1,16 +1,18 @@
 
 #' Prepare ECDC data
 #'
-#' Performs standardisation of country names and infers ISO3, continent and region data using the countrycode::countrycode function
-# Adjust for one-day lag, because ECDC reports at 10am CET the next day
+#' Performs standardisation of country names and infers ISO3, continent and region data using the countrycode::countrycode function.
+# Adjust for one-day lag, because ECDC reports at 10am CET the next day. Complete missing infos.
 #'
+#'
+#' @param dta dataframe generated from [get_ecdc_data()]
 #'
 #' @return a tibble dataframe
 #' @importFrom magrittr %>%
 #' @export
 #'
 #' @examples
-#' df_ecdc <- get_ecdc_data()
+#' df_ecdc <- prepare_ecdc_data()
 prepare_ecdc_data <- function(dta){
 
   dta %>%
@@ -20,7 +22,6 @@ prepare_ecdc_data <- function(dta){
     dplyr::mutate_at(dplyr::vars(cases, deaths), ~ifelse(. < 0, 0L, .)) %>%
     dplyr::mutate(
       country = countrycode::countrycode(iso_a3, origin = "iso3c", destination = "country.name"),
-      # Complete missing infos
       country = dplyr::case_when(
         country == "Congo - Kinshasa" ~ "Democratic Republic of the Congo",
         country == "Congo - Brazzaville" ~ "Republic of Congo",

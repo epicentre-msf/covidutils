@@ -6,12 +6,15 @@
 \usage{
 prepare_ecdc_data(dta)
 }
+\arguments{
+\item{dta}{dataframe generated from \code{\link[=get_ecdc_data]{get_ecdc_data()}}}
+}
 \value{
 a tibble dataframe
 }
 \description{
-Performs standardisation of country names and infers ISO3, continent and region data using the countrycode::countrycode function
+Performs standardisation of country names and infers ISO3, continent and region data using the countrycode::countrycode function.
 }
 \examples{
-df_ecdc <- get_ecdc_data()
+df_ecdc <- prepare_ecdc_data()
 }
