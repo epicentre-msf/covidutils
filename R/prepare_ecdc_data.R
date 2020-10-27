@@ -1,9 +1,16 @@
 
 #' Prepare ECDC data
-
+#'
 #' Performs standardisation of country names and infers ISO3, continent and region data using the countrycode::countrycode function
 # Adjust for one-day lag, because ECDC reports at 10am CET the next day
-
+#'
+#'
+#' @return a tibble dataframe
+#' @importFrom magrittr %>%
+#' @export
+#'
+#' @examples
+#' df_ecdc <- get_ecdc_data()
 prepare_ecdc_data <- function(dta){
 
   dta %>%

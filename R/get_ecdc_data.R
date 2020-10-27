@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-#' df_ecdc <- get_ecdc_data()
+#' df_ecdc <- prepare_ecdc_data(dta)
 get_ecdc_data <- function() {
 
   base_url <- "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv"
