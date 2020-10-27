@@ -1,37 +1,12 @@
 
-#' Import ECDC data
-#'
-#' https://opendata.ecdc.europa.eu/covid19/casedistribution/csv
-#'
-#' Performs standardisation of country names and infers ISO3, continent and region
-#'   data using the [`countrycode::countrycode`] function
-#'
-#' @return a tibble dataframe
-#' @importFrom magrittr %>%
-#' @export
-#'
-#' @examples
-#' df_ecdc <- get_ecdc_data()
-get_ecdc_data <- function() {
+#' Prepare ECDC data
 
-  base_url <- "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv"
-  xlsx_url <- "https://www.ecdc.europa.eu/sites/default/files/documents/COVID-19-geographic-disbtribution-worldwide.xlsx"
+#' Performs standardisation of country names and infers ISO3, continent and region data using the countrycode::countrycode function
+# Adjust for one-day lag, because ECDC reports at 10am CET the next day
 
-  error <- suppressMessages(
-    suppressWarnings(try(readr::read_csv(file = base_url), silent = TRUE))
-  )
+prepare_ecdc_data <- function(dta){
 
-  if ("try-error" %in% class(error)) {
-    message("csv unavailable, trying xlsx")
-    httr::GET(xlsx_url, httr::write_disk(tf <- tempfile(fileext = ".xlsx")))
-    df <- readxl::read_excel(tf)
-  } else {
-    df <- readr::read_csv(base_url)
-  }
-
-
-  df %>%
-    # Adjust for one-day lag, because ECDC reports at 10am CET the next day
+  dta %>%
     dplyr::mutate(date = lubridate::make_date(year, month, day) - 1) %>%
     dplyr::select(date, geoid = geoId, country_ecdc = countriesAndTerritories, iso_a3 = countryterritoryCode, population_2019 = popData2019, cases, deaths) %>%
     dplyr::arrange(date) %>%
