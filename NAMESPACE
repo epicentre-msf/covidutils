@@ -2,4 +2,5 @@
 
 export(get_ecdc_data)
 export(prepare_ecdc_data)
+export(prepare_msf_dta)
 importFrom(magrittr,"%>%")
