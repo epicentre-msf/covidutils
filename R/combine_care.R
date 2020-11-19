@@ -11,7 +11,7 @@
 #'
 combine_care <- function(var1, var2){
   case_when(
-    any(var1 == 'Yes', var2 == 'Yes') ~ 'Yes',
+    var1 == 'Yes' | var2 == 'Yes' ~ 'Yes',
     var1 == 'No' & (var2 == 'Unknown' | is.na(var2)) ~ 'No at admission then not reported',
     (var1 == 'No' | is.na(var1)) & var2 == 'No' ~ 'No at any time',
     TRUE ~ 'Not reported') %>%

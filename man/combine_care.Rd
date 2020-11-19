@@ -12,7 +12,7 @@ combine_care(var1, var2)
 \item{var2}{variable at discharge}
 }
 \value{
-
+a character vector
 }
 \description{
 Specific function that combine 'twin' variables of patient's care at admission (\code{var1}) and at discharge (\code{var2}) in to a single variable. Input variable is coded with values 'Yes' or 'No'. Output variable is code with values 'Yes', 'No at admission then not reported', 'No at any time' or 'Not reported'.
