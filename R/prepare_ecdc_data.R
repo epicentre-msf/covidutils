@@ -11,8 +11,6 @@
 #' @importFrom magrittr %>%
 #' @export
 #'
-#' @examples
-#' df_ecdc <- prepare_ecdc_data()
 prepare_ecdc_data <- function(dta){
 
   dta %>%

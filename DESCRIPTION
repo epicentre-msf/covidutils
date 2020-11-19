@@ -16,4 +16,5 @@ Imports:
     readxl,
     countrycode,
     lubridate,
-    magrittr
+    magrittr,
+    scales

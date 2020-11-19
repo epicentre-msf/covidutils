@@ -12,6 +12,3 @@ a tibble dataframe
 \description{
 get data from https://opendata.ecdc.europa.eu/covid19/casedistribution/csv or from https://www.ecdc.europa.eu/sites/default/files/documents/COVID-19-geographic-disbtribution-worldwide.xlsx
 }
-\examples{
-df_ecdc <- prepare_ecdc_data(dta)
-}
