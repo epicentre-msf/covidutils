@@ -106,8 +106,7 @@ prepare_msf_dta <- function(dta, shorten_var_names = FALSE){
         TRUE ~ levels_ynu[2]) %>% factor(levels = levels_ynu),
       merge_oxygen = combine_care(MSF_received_oxygen, MSF_outcome_received_oxygen),
       merge_icu    = combine_care(patcourse_icu , outcome_patcourse_icu),
-      merge_vent   = combine_care(patcourse_vent, outcome_patcourse_vent),
-      merge_ecmo   = combine_care(patcourse_ecmo, outcome_patcourse_ecmo))
+      merge_vent   = combine_care(patcourse_vent, outcome_patcourse_vent))
 
 
   ## --- SHORTEN variable names ---
