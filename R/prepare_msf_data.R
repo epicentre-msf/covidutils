@@ -88,11 +88,11 @@ prepare_msf_dta <- function(dta, shorten_var_names = FALSE){
 
 
   ## Recode presence of comorbidities including the MSF ones
-  Comcond_count <- rowSums(select(dta, starts_with('Comcond_'), MSF_hiv_status, MSF_hypertension, MSF_tb_active, MSF_malaria, MSF_malnutrition, MSF_smoking) == "Yes", na.rm = TRUE)
+  ind_Comcond_count <- rowSums(select(dta, starts_with('Comcond_'), MSF_hiv_status, MSF_hypertension, MSF_tb_active, MSF_malaria, MSF_malnutrition, MSF_smoking) == "Yes", na.rm = TRUE)
 
-  Comcond_01 <- ifelse(Comcond_count > 0, 1, 0)
+  ind_Comcond_01 <- ifelse(ind_Comcond_count > 0, 1, 0)
 
-  dta <- cbind(dta, Comcond_count, Comcond_01)
+  dta <- cbind(dta, ind_Comcond_count, ind_Comcond_01)
 
 
   ## Patients' care variables
