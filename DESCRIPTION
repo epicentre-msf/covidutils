@@ -2,7 +2,8 @@ Package: covidutils
 Title: Utility Functions For Epicentre COVID-19 Analysis
 Version: 0.0.0.9000
 Authors@R: c(
-    person(given = "Paul", family = "Campbell", role = c("aut", "cre"), email = "paul.campbell@epicentre.msf.org"))
+    person(given = "Paul", family = "Campbell", role = c("aut", "cre"), email = "paul.campbell@epicentre.msf.org"),
+    person(given = "Francesco", family = "Grandeso", role = c("aut"), email = "francesco.grandeso@epicentre.msf.org"))
 Description: Centralisation of R functions used across various covid related projects at Epicentre.
 License: MIT + file LICENSE
 Encoding: UTF-8
