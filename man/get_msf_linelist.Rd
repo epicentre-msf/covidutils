@@ -12,7 +12,13 @@ get_msf_linelist(
 )
 }
 \arguments{
-\item{force}{}
+\item{path_local}{path_local}
+
+\item{file_name}{file_name}
+
+\item{path_remote}{path_remote}
+
+\item{force}{force download}
 }
 \value{
 

@@ -1,10 +1,10 @@
 
 #' Import MSF data from a remote location
 #'
-#' @param path_local
-#' @param file_name
-#' @param path_remote
-#' @param force
+#' @param path_local path_local
+#' @param file_name file_name
+#' @param path_remote path_remote
+#' @param force force download
 #'
 #' @return
 #' @export
