@@ -42,9 +42,14 @@ model_trends <- function(x,
       fill = list(cases = NA_real_, deaths = NA_real_)
     )
 
+  cases <- get_trend(xsub, "cases", min_sum, ma_window)
+  deaths <- get_trend(xsub, "deaths", min_sum, ma_window)
+
   tibble::tibble(
-    trend_cases = get_trend(xsub, "cases", min_sum, ma_window),
-    trend_deaths = get_trend(xsub, "deaths", min_sum, ma_window)
+    trend_cases = cases$trend,
+    trend_cases_coeff = cases$coeff,
+    trend_deaths = deaths$trend,
+    trend_deaths_coeff = deaths$coeff
   )
 }
 
@@ -69,7 +74,8 @@ get_trend <- function(xsub, var, min_sum, ma_window) {
       lwr95  = ci95[2,1],
       upr95  = ci95[2,2]
     ) %>%
-      dplyr::mutate(
+      dplyr::transmute(
+        coeff,
         trend = case_when(
           lwr95 > 0 ~ "Increasing",
           lwr95 <= 0 & lwr80 > 0 ~ "Likely increasing",
@@ -78,9 +84,8 @@ get_trend <- function(xsub, var, min_sum, ma_window) {
           lwr80 < 0 & upr80 > 0 ~ "Stable",
           TRUE ~ NA_character_
         )
-      ) %>%
-      dplyr::pull(trend)
+      )
   } else {
-    NA_character_
+    tibble::tibble(coeff = NA_real_, trend = NA_character_)
   }
 }
