@@ -5,11 +5,13 @@
 #'
 #' @return tibble
 #' @export
-get_trends <- function(df, time_unit_extent = 14) {
+get_trends <- function(df,
+                       time_unit_extent = 14,
+                       omit_past_days = 2) {
 
   ## params
   # don't include latest 2 days as likely data is incomplete
-  last_date <- max(df$date, na.rm = TRUE) - 2
+  last_date <- max(df$date, na.rm = TRUE) - omit_past_days
   dates_extent <- c(last_date - (time_unit_extent - 1), last_date)
 
   ## get trends
