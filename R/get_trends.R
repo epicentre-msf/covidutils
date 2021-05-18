@@ -7,7 +7,8 @@
 #' @export
 get_trends <- function(df,
                        time_unit_extent = 14,
-                       omit_past_days = 2) {
+                       omit_past_days = 2,
+                       add_ci         = FALSE) {
 
   ## params
   # don't include latest 2 days as likely data is incomplete
@@ -18,13 +19,14 @@ get_trends <- function(df,
   trends_all <- df %>%
     dplyr::group_by(iso_a3) %>%
     tidyr::nest() %>%
-    dplyr::mutate(model = map(data, model_trends, dates_extent)) %>%
+    dplyr::mutate(model = map(data, model_trends, dates_extent, add_ci = add_ci)) %>%
     dplyr::select(-data) %>%
     tidyr::unnest(model)
 
   df %>%
     dplyr::group_by(continent, region, country, iso_a3) %>%
-    dplyr::summarise(cases = sum(cases, na.rm = TRUE), deaths = sum(deaths, na.rm = TRUE)) %>%
+    dplyr::summarise(cases = sum(cases, na.rm = TRUE),
+                     deaths = sum(deaths, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
     dplyr::inner_join(trends_all)
 }
@@ -34,7 +36,8 @@ get_trends <- function(df,
 model_trends <- function(x,
                          dates_extent,
                          ma_window = 3,
-                         min_sum = 30) {
+                         min_sum   = 30,
+                         add_ci    = FALSE) {
 
   # filter data to date range of interest
   xsub <- x %>%
@@ -47,12 +50,25 @@ model_trends <- function(x,
   cases <- get_trend(xsub, "cases", min_sum, ma_window)
   deaths <- get_trend(xsub, "deaths", min_sum, ma_window)
 
-  tibble::tibble(
-    trend_cases = cases$trend,
-    trend_cases_coeff = cases$coeff,
-    trend_deaths = deaths$trend,
-    trend_deaths_coeff = deaths$coeff
-  )
+
+  if (add_ci == FALSE) {
+    tibble::tibble(
+      trend_cases        = cases$trend,
+      trend_cases_coeff  = cases$coeff,
+      trend_deaths       = deaths$trend,
+      trend_deaths_coeff = deaths$coeff)
+  } else {
+    tibble::tibble(
+      trend_cases             = cases$trend,
+      trend_cases_coeff       = cases$coeff,
+      trend_cases_coeff_lwr95 = cases$lwr95,
+      trend_cases_coeff_upr95 = cases$upr95,
+
+      trend_deaths             = deaths$trend,
+      trend_deaths_coeff       = deaths$coeff,
+      trend_deaths_coeff_lwr95 = deaths$lwr95,
+      trend_deaths_coeff_upr95 = deaths$upr95)
+    }
 }
 
 #' @noRd
@@ -78,6 +94,8 @@ get_trend <- function(xsub, var, min_sum, ma_window) {
     ) %>%
       dplyr::transmute(
         coeff,
+        lwr95,
+        upr95,
         trend = case_when(
           lwr95 > 0 ~ "Increasing",
           lwr95 <= 0 & lwr80 > 0 ~ "Likely increasing",
@@ -88,6 +106,9 @@ get_trend <- function(xsub, var, min_sum, ma_window) {
         )
       )
   } else {
-    tibble::tibble(coeff = NA_real_, trend = NA_character_)
+    tibble::tibble(coeff = NA_real_,
+                   trend = NA_character_,
+                   lwr95 = NA_real_,
+                   upr95 = NA_real_)
   }
 }
