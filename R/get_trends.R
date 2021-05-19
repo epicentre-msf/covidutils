@@ -133,10 +133,10 @@ get_doubling_time <- function(df_trends,
 
     if ("trend_cases_coeff_lwr95" %in% names(df_trends)) {
       df_trends <- df_trends %>%
-        mutate(doubling_est_cases = log(2) / trend_cases_coeff,
+        dplyr::mutate(doubling_est_cases = log(2) / trend_cases_coeff,
                doubling_lwr_cases = log(2) / trend_cases_coeff_upr95, # Francesco
                doubling_upr_cases = log(2) / trend_cases_coeff_lwr95) %>%
-        select(continent:trend_cases_coeff_upr95,
+        dplyr::select(continent:trend_cases_coeff_upr95,
                doubling_est_cases, doubling_lwr_cases, doubling_upr_cases,
                everything())
     } else {
@@ -150,7 +150,7 @@ get_doubling_time <- function(df_trends,
 
     if ( "trend_deaths_coeff_lwr95" %in% names(df_trends) ){
       df_trends <- df_trends %>%
-        mutate( doubling_est_deaths = log(2) / trend_deaths_coeff,
+        dplyr::mutate( doubling_est_deaths = log(2) / trend_deaths_coeff,
                 doubling_lwr_deaths = log(2) / trend_deaths_coeff_upr95,
                 doubling_upr_deaths = log(2) / trend_deaths_coeff_lwr95)
     } else {
