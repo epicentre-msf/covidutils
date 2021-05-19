@@ -121,11 +121,9 @@ get_trend <- function(xsub, var, min_sum, ma_window) {
 #' Should have the confidence intervals on coeffs to run.
 #' @param serie Which serie to use to generate doubling time (cases, deaths, both). Defaults to "both".
 #'
-#' @return The same dataframe with additional columns for doubling
+#' @return A tibble. The same tibble with additional columns for doubling
 #' time estimates and its confidence intervals
 #' @export
-#'
-#' @examples
 get_doubling_time <- function(df_trends,
                               serie = "both") {
 
