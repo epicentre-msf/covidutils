@@ -11,7 +11,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  fig.retina = 2
 )
 ```
 
@@ -62,14 +63,39 @@ Further R package development resources:
 ## Function examples
 
 ```{r example}
+library(tidyverse)
 library(covidutils)
 ```
 
-### Import ECDC data
+### Import JHU CSSE data
 
 ```{r}
-df_ecdc <- get_ecdc_data()
+df_covid <- get_owid_jhcsse()
+glimpse(df_covid)
+```
 
-df_ecdc
+### Compute 14 and 30 day case and death trends
+
+```{r}
+df_trends <- get_country_summaries(df_covid)
+glimpse(df_trends)
+```
+
+```{r}
+# country with fastest growing case numbers in last 14 days
+(iso <- df_trends %>% 
+  filter(trend_cases_coeff_14d == max(trend_cases_coeff_14d, na.rm = TRUE)) %>% 
+  pull(iso_a3))
+df_country <- df_covid %>% filter(iso_a3 == iso)
+df_trends_country <- df_trends %>% filter(iso_a3 == iso)
+
+```
+
+```{r}
+country_plot(df_country, df_trends_country, add_title = TRUE)
+```
+
+```{r}
+country_table(df_trends_country)
 ```
 

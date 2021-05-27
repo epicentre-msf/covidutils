@@ -4,7 +4,14 @@
 \alias{get_trends}
 \title{Compute case and deaths trends}
 \usage{
-get_trends(df, time_unit_extent = 14)
+get_trends(
+  df,
+  time_unit_extent = 14,
+  omit_past_days = 2,
+  add_ci = TRUE,
+  add_dt = TRUE,
+  add_preds = TRUE
+)
 }
 \arguments{
 \item{df}{JHSU CSSE data}
