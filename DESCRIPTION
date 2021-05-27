@@ -18,4 +18,8 @@ Imports:
     countrycode,
     lubridate,
     magrittr,
-    scales
+    scales,
+    ggplot2,
+    gt,
+    stringr,
+    tidyr
