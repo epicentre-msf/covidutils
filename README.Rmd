@@ -91,11 +91,8 @@ df_trends_country <- df_trends %>% filter(iso_a3 == iso)
 
 ```
 
-```{r}
+```{r fig.height=6, fig.width=10}
 country_plot(df_country, df_trends_country, add_title = TRUE)
 ```
 
-```{r}
-country_table(df_trends_country)
-```
 

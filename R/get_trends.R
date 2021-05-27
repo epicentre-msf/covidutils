@@ -12,18 +12,6 @@ get_trends <- function(df,
                        add_dt         = TRUE,
                        add_preds      = TRUE) {
 
-  ## params
-  # don't include latest 2 days as likely data is incomplete
-  # last_date <- max(df$date, na.rm = TRUE) - omit_past_days
-  # dates_extent <- c(last_date - (time_unit_extent - 1), last_date)
-  #
-  # df_counts <- df %>%
-  #   dplyr::filter(dplyr::between(date, dates_extent[1], dates_extent[2])) %>%
-  #   dplyr::group_by(iso_a3) %>%
-  #   dplyr::summarise(cases = sum(cases, na.rm = TRUE),
-  #                    deaths = sum(deaths, na.rm = TRUE)) %>%
-  #   dplyr::ungroup()
-
   ## get trends
   trends_all <- df %>%
     dplyr::group_by(iso_a3) %>%
