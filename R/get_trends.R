@@ -5,12 +5,14 @@
 #'
 #' @return tibble
 #' @export
-get_trends <- function(df,
-                       time_unit_extent = 14,
-                       omit_past_days = 2,
-                       add_ci         = TRUE,
-                       add_dt         = TRUE,
-                       add_preds      = TRUE) {
+get_trends <- function(
+  df,
+  time_unit_extent = 14,
+  omit_past_days = 2,
+  add_ci = TRUE,
+  add_dt = TRUE,
+  add_preds = TRUE
+) {
 
   ## get trends
   trends_all <- df %>%
@@ -25,14 +27,16 @@ get_trends <- function(df,
 
 #' @noRd
 #' @keywords internal
-model_trends <- function(x,
-                         time_unit_extent,
-                         omit_past_days,
-                         add_ci    = TRUE,
-                         add_dt    = TRUE,
-                         add_preds = TRUE,
-                         ma_window = 3,
-                         min_sum   = 30) {
+model_trends <- function(
+  x,
+  time_unit_extent,
+  omit_past_days,
+  add_ci = TRUE,
+  add_dt = TRUE,
+  add_preds = TRUE,
+  ma_window = 3,
+  min_sum = 30
+) {
 
   # don't include latest 2 days as likely data is incomplete
   last_date <- max(x$date, na.rm = TRUE) - omit_past_days
@@ -50,13 +54,13 @@ model_trends <- function(x,
   t_deaths <- get_country_trend(xsub, "deaths", min_sum, ma_window)
 
   df_out <- tibble::tibble(
-    date_start         = dates_extent[1],
-    date_end           = dates_extent[2],
-    cases              = sum(xsub$cases, na.rm = TRUE),
-    trend_cases        = t_cases$trend,
-    trend_cases_coeff  = t_cases$coeff,
-    deaths             = sum(xsub$deaths, na.rm = TRUE),
-    trend_deaths       = t_deaths$trend,
+    date_start = dates_extent[1],
+    date_end = dates_extent[2],
+    cases = sum(xsub$cases, na.rm = TRUE),
+    trend_cases = t_cases$trend,
+    trend_cases_coeff = t_cases$coeff,
+    deaths = sum(xsub$deaths, na.rm = TRUE),
+    trend_deaths = t_deaths$trend,
     trend_deaths_coeff = t_deaths$coeff
   )
 
@@ -91,7 +95,6 @@ model_trends <- function(x,
   }
 
   df_out %>% dplyr::select(dplyr::starts_with("date_"), dplyr::contains("cases"), dplyr::contains("deaths"))
-
 }
 
 #' @noRd
@@ -108,7 +111,10 @@ get_country_trend <- function(xsub, var, min_sum, ma_window) {
     ci95 <- confint(mdl, level = 0.95)
     preds <- dplyr::transmute(
       broom::augment(mdl, interval = "confidence", conf.int = TRUE, conf.level = 0.95),
-      date, fitted = exp(.fitted), lower_95 = exp(.lower), upper_95 = exp(.upper)
+      date,
+      fitted = exp(.fitted),
+      lower_95 = exp(.lower),
+      upper_95 = exp(.upper)
     ) %>%
       dplyr::left_join(
         broom::augment(mdl, interval = "confidence", conf.int = TRUE, conf.level = 0.80) %>%
@@ -119,10 +125,10 @@ get_country_trend <- function(xsub, var, min_sum, ma_window) {
     # prep output
     df_out <- tibble::tibble(
       coeff = coefficients(mdl)[[2]],
-      lwr80  = ci80[2,1],
-      upr80  = ci80[2,2],
-      lwr95  = ci95[2,1],
-      upr95  = ci95[2,2],
+      lwr80 = ci80[2, 1],
+      upr80 = ci80[2, 2],
+      lwr95 = ci95[2, 1],
+      upr95 = ci95[2, 2],
       preds = list(preds)
     ) %>%
       dplyr::transmute(
@@ -134,22 +140,24 @@ get_country_trend <- function(xsub, var, min_sum, ma_window) {
           lwr95 > 0 ~ "Increasing",
           lwr95 <= 0 & lwr80 > 0 ~ "Likely increasing",
           upr95 < 0 ~ "Decreasing",
-          upr95 >= 0 & upr80 < 0  ~ "Likely decreasing",
+          upr95 >= 0 & upr80 < 0 ~ "Likely decreasing",
           lwr80 < 0 & upr80 > 0 ~ "Stable",
           TRUE ~ NA_character_
         ),
-        dt_est = ifelse(trend %in% c("Increasing", "Likely increasing"), log(2)/coeff, NA_real_),
-        dt_lwr = ifelse(trend %in% c("Increasing", "Likely increasing"), log(2)/upr95, NA_real_),
-        dt_upr = ifelse(trend %in% c("Increasing", "Likely increasing"), log(2)/lwr95, NA_real_)
+        dt_est = ifelse(trend %in% c("Increasing", "Likely increasing"), log(2) / coeff, NA_real_),
+        dt_lwr = ifelse(trend %in% c("Increasing", "Likely increasing"), log(2) / upr95, NA_real_),
+        dt_upr = ifelse(trend %in% c("Increasing", "Likely increasing"), log(2) / lwr95, NA_real_)
       )
   } else {
-    tibble::tibble(coeff = NA_real_,
-                   trend = NA_character_,
-                   lwr95 = NA_real_,
-                   upr95 = NA_real_,
-                   preds = NA,
-                   dt_est = NA_real_,
-                   dt_lwr = NA_real_,
-                   dt_upr = NA_real_)
+    tibble::tibble(
+      coeff = NA_real_,
+      trend = NA_character_,
+      lwr95 = NA_real_,
+      upr95 = NA_real_,
+      preds = NA,
+      dt_est = NA_real_,
+      dt_lwr = NA_real_,
+      dt_upr = NA_real_
+    )
   }
 }
