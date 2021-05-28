@@ -34,8 +34,8 @@ country_plot <- function(
     pivot_longer(-date, names_to = 'obs', values_to = 'n') %>%
     filter(n > 0)
 
-  df_14d <- dta_obs %>% filter(date >= df_trends$date_start_14d-1, date <= df_trends$date_end_14d+1)
-  df_30d <- dta_obs %>% filter(date >= df_trends$date_start_30d-1, date <= df_trends$date_end_30d+1)
+  df_14d <- dta_obs %>% filter(date >= df_trends$date_start_14d, date <= df_trends$date_end_14d)
+  df_30d <- dta_obs %>% filter(date >= df_trends$date_start_30d, date <= df_trends$date_end_30d)
 
   mdl14d_cases_dta  <- pluck(df_trends$trend_cases_preds_14d, 1)
   mdl14d_deaths_dta <- pluck(df_trends$trend_deaths_preds_14d, 1)
