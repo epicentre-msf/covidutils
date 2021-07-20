@@ -20,7 +20,7 @@ country_plot <- function(
   ylab_mdl = "Frequency and fitted values",
   caption = "Fitted using a linear regression model",
   add_title = FALSE,
-  title = "Covid-19 cases and deaths and trend estimations in"
+  title = "COVID-19 case and death trend estimations in"
 ) {
   # Parameters
   country_id  <- df_trends$country
@@ -88,7 +88,7 @@ country_plot <- function(
     scale_colour_manual(values = main_colour) +
     scale_fill_manual(values = main_colour) +
     scale_x_date(labels = scales::label_date_short()) +
-    scale_y_continuous(expand = expansion(mult = c(0, .1))) +
+    scale_y_continuous(labels = scales::number_format(accuracy = 1), expand = expansion(mult = c(0, .1))) +
     xlab(NULL) +
     ylab(ylab_curve) +
     labs(subtitle = title_curve) +
@@ -101,29 +101,39 @@ country_plot <- function(
       strip.text = element_text(face = "bold", size = 11)
     )
 
+  labels_facets_30d <- c(
+    cases = if_else(is.na(df_trends$trend_cases_30d), "Unknown", df_trends$trend_cases_30d),
+    deaths = if_else(is.na(df_trends$trend_deaths_30d), "Unknown", df_trends$trend_deaths_30d)
+  )
+
   plot_mdl1 <- ggplot(df_30d_plot, aes(x = date, y = n)) +
-    facet_wrap(~ obs, scales = "free_y", ncol = 1, labeller = labeller(obs = labels_facets)) +
+    facet_wrap(~ obs, scales = "free_y", ncol = 1, labeller = labeller(obs = labels_facets_30d)) +
     geom_point(aes(colour = obs), size = 2) +
     scale_colour_manual(values = main_colour) +
     geom_ribbon(aes(ymin = lower_95, ymax = upper_95, fill = obs), alpha = 0.4) +
     geom_line(aes(y = fitted, colour = obs), size = 1) +
     scale_fill_manual(values = main_colour) +
     scale_x_date(date_breaks = "5 days", labels = scales::label_date_short()) +
+    scale_y_continuous(breaks = integer_breaks(), labels = scales::number_format(accuracy = 1)) +
     xlab(NULL) +
     ylab(ylab_mdl) +
     labs(subtitle = title_mdl1) +
     theme_light() +
     theme(legend.position = "none", strip.text = element_text(face = "bold", size = 11))
 
-
+  labels_facets_14d <- c(
+    cases = if_else(is.na(df_trends$trend_cases_14d), "Unknown", df_trends$trend_cases_14d),
+    deaths = if_else(is.na(df_trends$trend_deaths_14d), "Unknown", df_trends$trend_deaths_14d)
+  )
   plot_mdl2 <- ggplot(df_14d_plot, aes(x = date, y = n)) +
-    facet_wrap(~ obs, scales = "free_y", ncol = 1, labeller = labeller(obs = labels_facets)) +
+    facet_wrap(~ obs, scales = "free_y", ncol = 1, labeller = labeller(obs = labels_facets_14d)) +
     geom_point(aes(colour = obs), size = 2) +
     scale_colour_manual(values = main_colour) +
     geom_ribbon(aes(ymin = lower_95, ymax = upper_95, fill = obs), alpha = 0.4) +
     geom_line(aes(y = fitted, colour = obs), size = 1) +
     scale_fill_manual(values = main_colour) +
     scale_x_date(date_breaks = "2 days", labels = scales::label_date_short()) +
+    scale_y_continuous(breaks = integer_breaks(), labels = scales::number_format(accuracy = 1)) +
     xlab(NULL) +
     ylab(NULL) +
     labs(subtitle = title_mdl2) +
@@ -140,7 +150,10 @@ country_plot <- function(
     plot_annotation(caption = caption)
 
   if (add_title) {
-    multiplot <- multiplot + plot_annotation(title = paste(title, country_id))
+    multiplot <- multiplot + plot_annotation(
+      title = paste(title, country_id),
+      theme = theme(plot.title = element_text(face = "bold"))
+    )
   }
 
   return(multiplot)
