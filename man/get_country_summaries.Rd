@@ -4,10 +4,12 @@
 \alias{get_country_summaries}
 \title{Get summary df of country cases, deaths and trends etc}
 \usage{
-get_country_summaries(df_jhu, inc_factor = 1e+05)
+get_country_summaries(df_jhu, omit_past_days = 2, inc_factor = 1e+05)
 }
 \arguments{
 \item{df_jhu}{dataframe output from \code{\link[=get_owid_jhcsse]{get_owid_jhcsse()}}}
+
+\item{omit_past_days}{how many most recent days to omit from trend calculation}
 
 \item{inc_factor}{incidence factor. defaults to 100 000}
 }

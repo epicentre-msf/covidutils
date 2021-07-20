@@ -2,15 +2,16 @@
 #' Get summary df of country cases, deaths and trends etc
 #'
 #' @param df_jhu dataframe output from [`get_owid_jhcsse()`]
+#' @param omit_past_days how many most recent days to omit from trend calculation
 #' @param inc_factor incidence factor. defaults to 100 000
 #'
 #' @return tibble
 #' @export
-get_country_summaries <- function(df_jhu, inc_factor = 100000) {
+get_country_summaries <- function(df_jhu, omit_past_days = 2, inc_factor = 100000) {
   df_summary <- get_owid_summary()
 
-  df_trends_14d <- get_trends(df_jhu, time_unit_extent = 14)
-  df_trends_30d <- get_trends(df_jhu, time_unit_extent = 30)
+  df_trends_14d <- get_trends(df_jhu, time_unit_extent = 14, omit_past_days = omit_past_days)
+  df_trends_30d <- get_trends(df_jhu, time_unit_extent = 30, omit_past_days = omit_past_days)
   df_trends <- dplyr::left_join(df_trends_14d, df_trends_30d, by = "iso_a3", suffix = c("_14d", "_30d"))
 
   df_export <-
