@@ -1,6 +1,6 @@
 
 
-# Plot cases and deaths and trends into a single graphic plot
+#' Plot cases and deaths and trends into a single graphic plot
 #'
 #' @param dta daily case and death data for country
 #' @param df_trends trend preds etc for country
