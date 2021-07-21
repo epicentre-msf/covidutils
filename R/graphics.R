@@ -26,7 +26,8 @@ country_plot <- function(
   country_id  <- df_trends$country
   main_colour <- c(cases = '#1A62A3', deaths = '#e10000')
 
-  # browser()
+  data_as_of <- df_trends$date_end_14d
+  data_as_of <- format(data_as_of, "%A %d %B %Y")
 
   # Table observations
   dta_obs <- dta %>%
@@ -152,6 +153,7 @@ country_plot <- function(
   if (add_title) {
     multiplot <- multiplot + plot_annotation(
       title = paste(title, country_id),
+      subtitle = glue::glue("Data to {data_as_of}"),
       theme = theme(plot.title = element_text(face = "bold"))
     )
   }
