@@ -116,6 +116,7 @@ country_plot <- function(
     scale_fill_manual(values = main_colour) +
     scale_x_date(date_breaks = "5 days", labels = scales::label_date_short()) +
     scale_y_continuous(breaks = integer_breaks(), labels = scales::number_format(accuracy = 1)) +
+    coord_cartesian(xlim = c(df_trends$date_start_30d, df_trends$date_end_30d)) +
     xlab(NULL) +
     ylab(ylab_mdl) +
     labs(subtitle = title_mdl1) +
@@ -135,6 +136,7 @@ country_plot <- function(
     scale_fill_manual(values = main_colour) +
     scale_x_date(date_breaks = "2 days", labels = scales::label_date_short()) +
     scale_y_continuous(breaks = integer_breaks(), labels = scales::number_format(accuracy = 1)) +
+    coord_cartesian(xlim = c(df_trends$date_start_14d, df_trends$date_end_14d)) +
     xlab(NULL) +
     ylab(NULL) +
     labs(subtitle = title_mdl2) +
